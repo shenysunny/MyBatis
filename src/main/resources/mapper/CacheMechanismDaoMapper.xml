@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.mybatis.dao.CacheMechanismDao">
+    <!--配置缓存-->
+    <!-- 引用缓存：namespace：指定和哪个名称空间下的缓存一样 -->
+    <!--<cache-ref namespace="com.atguigu.mybatis.dao.EmployeeMapper"/>-->
+    <!--第三方缓存-->
+    <cache type="org.mybatis.caches.ehcache.EhcacheCache"></cache>
+    <!--二级缓存-->
+     <!--<cache eviction="FIFO" flushInterval="60000" readOnly="false" size="1024"></cache>-->
+    <!--
+    eviction:缓存的回收策略：
+        • LRU – 最近最少使用的：移除最长时间不被使用的对象。
+        • FIFO – 先进先出：按对象进入缓存的顺序来移除它们。
+        • SOFT – 软引用：移除基于垃圾回收器状态和软引用规则的对象。
+        • WEAK – 弱引用：更积极地移除基于垃圾收集器状态和弱引用规则的对象。
+        • 默认的是 LRU。
+    flushInterval：缓存刷新间隔
+        缓存多长时间清空一次，默认不清空，设置一个毫秒值
+    readOnly:是否只读：
+        true：只读；mybatis认为所有从缓存中获取数据的操作都是只读操作，不会修改数据。
+                 mybatis为了加快获取速度，直接就会将数据在缓存中的引用交给用户。不安全，速度快
+        false：非只读：mybatis觉得获取的数据可能会被修改。
+                mybatis会利用序列化&反序列的技术克隆一份新的数据给你。安全，速度慢
+    size：缓存存放多少元素；
+    type=""：指定自定义缓存的全类名；
+            实现Cache接口即可；
+    -->
+
+
+    <!--自定义返回类型-->
+    <resultMap id="BaseResultMap" type="cn.mybatis.entity.EmpEntity">
+        <id column="emp_id" jdbcType="INTEGER" property="empId"/>
+        <result column="emp_name" jdbcType="VARCHAR" property="empName"/>
+        <result column="emp_gender" jdbcType="CHAR" property="empGender"/>
+        <result column="emp_email" jdbcType="VARCHAR" property="empEmail"/>
+    </resultMap>
+
+    <!--根据empName查询-->
+    <select id="gitEmpBy_empName"  resultType="cn.mybatis.entity.EmpEntity">
+        SELECT emp_id, emp_name, emp_gender, emp_email
+        FROM tab_emp
+        WHERE emp_name = #{empName,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据empName查询-->
+    <select id="gitEmpBy_empName2"  resultType="cn.mybatis.entity.EmpEntity">
+        SELECT emp_id, emp_name, emp_gender, emp_email
+        FROM tab_emp
+        WHERE emp_name = #{empName,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据empName查询-->
+    <select id="gitEmpBy_empName3"  resultType="cn.mybatis.entity.EmpEntity">
+        SELECT emp_id, emp_name, emp_gender, emp_email
+        FROM tab_emp
+        WHERE emp_name = #{empName,jdbcType=VARCHAR}
+    </select>
+</mapper>

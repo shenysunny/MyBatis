@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.mybatis.dao.CustomDao">
+    <resultMap id="BaseResultMap" type="cn.mybatis.entity.EmpEntity">
+        <id column="emp_id" jdbcType="INTEGER" property="empId"/>
+        <result column="emp_name" jdbcType="VARCHAR" property="empName"/>
+        <result column="emp_gender" jdbcType="CHAR" property="empGender"/>
+        <result column="emp_email" jdbcType="VARCHAR" property="empEmail"/>
+    </resultMap>
+
+    <!--###############################-常用查询-###############################-->
+    <!--增加-->
+    <insert id="addEmp" parameterType="cn.mybatis.entity.EmpEntity">
+        INSERT INTO tab_emp (emp_name, emp_gender, emp_email)
+        VALUES (#{empName,jdbcType=VARCHAR}, #{empGender,jdbcType=CHAR}, #{empEmail,jdbcType=VARCHAR})
+    </insert>
+
+    <!--修改-->
+    <update id="updeteEmp" parameterType="cn.mybatis.entity.EmpEntity">
+        UPDATE tab_emp
+        SET emp_name   = #{empName,jdbcType=VARCHAR},
+            emp_gender = #{empGender,jdbcType=CHAR},
+            emp_email  = #{empEmail,jdbcType=VARCHAR}
+        WHERE emp_id = #{empId,jdbcType=INTEGER}
+    </update>
+
+    <!--删除-->
+    <delete id="deleteEmpId" parameterType="cn.mybatis.entity.EmpEntity">
+        DELETE FROM tab_emp
+        WHERE emp_id = #{empId}
+    </delete>
+
+    <!--增加之后返回主键-->
+    <insert id="addEmpReturnId" parameterType="cn.mybatis.entity.EmpEntity" useGeneratedKeys="true" keyProperty="empId">
+        INSERT INTO tab_emp (emp_name, emp_gender, emp_email)
+        VALUES (#{empName,jdbcType=VARCHAR}, #{empGender,jdbcType=CHAR}, #{empEmail,jdbcType=VARCHAR})
+    </insert>
+
+    <!--###############################-参数处理-###############################-->
+    <!--###单个参数：-->
+    <!--根据empName查询-->
+    <select id="gitEmpBy_empName"  resultType="cn.mybatis.entity.EmpEntity">
+        SELECT emp_id, emp_name, emp_gender, emp_email
+        FROM tab_emp
+        WHERE emp_name = #{empName,jdbcType=VARCHAR}
+    </select>
+
+    <!--###多个参数：-->
+    <!--根据empId和empName查询-->
+    <select id="gitEmpBy_empIdANDempName"  resultType="cn.mybatis.entity.EmpEntity">
+        SELECT emp_id, emp_name, emp_gender, emp_email
+        FROM tab_emp
+        WHERE emp_id = #{empId,jdbcType=INTEGER} AND emp_name = #{empName,jdbcType=VARCHAR}
+    </select>
+
+    <!--利用map封装参数进行查询-->
+    <select id="gitEmpByMap"  resultType="cn.mybatis.entity.EmpEntity">
+        SELECT emp_id, emp_name, emp_gender, emp_email
+        FROM tab_emp
+        WHERE emp_id = #{empId,jdbcType=INTEGER} AND emp_name = #{empName,jdbcType=VARCHAR}
+    </select>
+
+    <!--返回一条记录的map；key就是列名，值就是对应的值-->
+    <select id="getEmpByIdReturnMap" resultType="map">
+        SELECT emp_id, emp_name, emp_gender, emp_email
+        FROM tab_emp
+        WHERE emp_id = #{empId,jdbcType=INTEGER}
+    </select>
+
+    <!--多条记录封装一个map：Map<String,Employee>:键是这条记录的主键，值是记录封装后的javaBean-->
+    <select id="getEmpByLastNameLikeReturnMap" resultType="cn.mybatis.entity.EmpEntity">
+        SELECT emp_id, emp_name, emp_gender, emp_email
+        FROM tab_emp
+        WHERE  emp_name LIKE  #{empName,jdbcType=VARCHAR}
+    </select>
+</mapper>
